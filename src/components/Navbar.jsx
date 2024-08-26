@@ -21,7 +21,7 @@ export default function Navbar() {
         }
         className="hover:text-white hover:bg-hoverGreen p-2 rounded-lg duration-200">Doa - doa</button>
         <button onClick={
-          ()=>{navigate("/kuis")}} className="hover:text-white hover:bg-hoverGreen p-2 rounded-lg duration-200">Kuis Islami</button>
+          ()=>{navigate("/caption")}} className="hover:text-white hover:bg-hoverGreen p-2 rounded-lg duration-200">Caption</button>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://equran.id/api/v2/surat";
+const BASE_URL = "https://equran.id/api/v2/";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,

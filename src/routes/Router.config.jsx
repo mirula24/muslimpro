@@ -2,9 +2,11 @@ import { createBrowserRouter, Outlet, useParams } from "react-router-dom";
 import Doa from "../components/Doa";
 import App from "../App";
 import ListSurah from "../components/ListSurah";
-import Kuis from "../components/Kuis";
 import Ngaji from "../components/Ngaji";
 import DoaDetail from "../components/DoaDetail";
+import Tafsir from "../components/Tafsir";
+import UploadCaption from "../components/UploadCaption";
+import GenerateCaption from "../components/GenerateCaption";
 
 
 const NgajiComponent = () => {
@@ -42,6 +44,10 @@ const router = createBrowserRouter([
     ),
     children: [
       {
+        index: true,
+        element: <GenerateCaption />,
+      },
+      {
         path: "quran/:nomor?",
         element: <NgajiComponent />,
       },
@@ -50,13 +56,14 @@ const router = createBrowserRouter([
         element: <DoaComponent />,
       },
       {
-        path: "kuis",
-        element: <Kuis />,
+        path: "caption",
+        element: <UploadCaption />,
       },
-      
+      {
+        path: "tafsir/:nomor",
+        element: <Tafsir />,
+      },
     ],
   },
 ]);
-
-
 export default router;
