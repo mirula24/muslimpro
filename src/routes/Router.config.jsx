@@ -1,22 +1,19 @@
 import { createBrowserRouter, Outlet, useParams } from "react-router-dom";
-import Doa from "../components/Doa";
 import App from "../App";
+import Caption from "../components/Caption";
+import Doa from "../components/Doa";
+import DoaDetail from "../components/DoaDetail";
 import ListSurah from "../components/ListSurah";
 import Ngaji from "../components/Ngaji";
-import DoaDetail from "../components/DoaDetail";
 import Tafsir from "../components/Tafsir";
 import UploadCaption from "../components/UploadCaption";
-import GenerateCaption from "../components/GenerateCaption";
-
 
 const NgajiComponent = () => {
   const params = useParams();
   return (
     <div>
       <p>
-        {params.nomor
-          ?<Ngaji nomor={`${params.nomor}`} />
-          : <ListSurah />}
+        {params.nomor ? <Ngaji nomor={`${params.nomor}`} /> : <ListSurah />}
       </p>
     </div>
   );
@@ -25,11 +22,7 @@ const DoaComponent = () => {
   const params = useParams();
   return (
     <div>
-      <p>
-        {params.id
-          ?<DoaDetail id={`${params.id}`} />
-          : <Doa />}
-      </p>
+      <p>{params.id ? <DoaDetail id={`${params.id}`} /> : <Doa />}</p>
     </div>
   );
 };
@@ -45,7 +38,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <GenerateCaption />,
+        element: <Caption />,
       },
       {
         path: "quran/:nomor?",
