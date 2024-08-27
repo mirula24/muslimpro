@@ -6,7 +6,7 @@ export default function Navbar() {
     const navigate = useNavigate();
   return (
     <div className="w-full fixed top-10 left-0 flex flex-row justify-center items-center font-bold lg:text-2xl sm:xl">
-      <div className="bg-customOrange m-[-20px] gap-0 lg:gap-4 flex  px-2 pr-12 rounded-l-xl lg:w-[340px] justify-around">
+      <div className="bg-customOrange m-[-20px] gap-0 lg:gap-4 flex  px-2 pr-11 rounded-l-xl lg:w-[340px] justify-around">
         <button onClick={()=>navigate("")} className="hover:text-white hover:bg-hoverGreen p-2 rounded-lg duration-200">Beranda</button>
         <button onClick={
           ()=>{navigate("/quran")}
@@ -15,7 +15,7 @@ export default function Navbar() {
       <div className="p-2 bg-customOrange rounded-full z-1000 fixed">
         <img src={icon} alt="" className="w-[50px]" />
       </div>
-      <div className="bg-customOrange m-[-20px] gap-4 flex px-2 pl-12 rounded-r-xl lg:w-[340px] justify-around">
+      <div className="bg-customOrange m-[-20px] gap-0 lg:gap-4 flex px-2 pl-12 rounded-r-xl lg:w-[340px] justify-around">
         <button onClick={
           ()=>{navigate("/doa")}
         }

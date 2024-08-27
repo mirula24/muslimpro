@@ -37,8 +37,8 @@ export default function Caption() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center sm:px-40">
-      <div className="bg-black bg-opacity-40 p-10 text-xl gap-3 rounded-lg text-white">
+    <div className="flex flex-col min-h-screen items-center justify-center sm:px-40 px-2">
+      <div className="bg-black bg-opacity-40 p-10 text-xl gap-3 rounded-lg text-white mb-36 mt-12">
         <p className="font-custom p-5 text-2xl">{caption.teksArab}</p>
         <p className="py-4">{caption.teksLatin}</p>
         <p className="font-custom py-7">{caption.ayat}</p>

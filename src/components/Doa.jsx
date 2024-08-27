@@ -23,12 +23,12 @@ const navigate = useNavigate();
   }, []);
 
   return (
-    <div className="flex w-full pt-20 gap-5 flex-wrap px-16">
+    <div className="flex w-full pt-20 lg:gap-5 gap-2 flex-wrap lg:px-16 px-2">
       {doadoa.map((datas) => {
         return (
-          <button onClick={()=>navigate(`${datas.id}`)} className="flex text-wrap w-[200px] bg-red-50 h-[100px] items-center justify-center mx-auto rounded-lg
+          <button onClick={()=>navigate(`${datas.id}`)} className="flex text-wrap w-full lg:w-[200px] bg-black bg-opacity-25 h-[100px] items-center justify-center mx-auto rounded-lg
           hover:w-[210px] hover:h-[110px] duration-200 ">
-            <h2 className="font-bold">{datas.doa}</h2>
+            <h2 className="font-semibold text-white">{datas.doa}</h2>
           </button>
         );
       })}
