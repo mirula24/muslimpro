@@ -21,7 +21,7 @@ class UploadCaption extends Component {
 
   fetchTotalCaption = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/caption");
+      const response = await axios.get("https://json-server-vercel-tawny-eight.vercel.app/api/caption");
       this.setState({ totalCaption: response.data.length });
     } catch (error) {
       console.error("Error fetching total caption:", error);
@@ -46,7 +46,7 @@ class UploadCaption extends Component {
     };
 
     try {
-      await axios.post("http://localhost:3000/caption", newCaption);
+      await axios.post("https://json-server-vercel-tawny-eight.vercel.app/api/caption", newCaption);
       this.setState({
         teksArab: "",
         teksLatin: "",
