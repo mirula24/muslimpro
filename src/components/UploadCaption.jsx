@@ -69,9 +69,9 @@ class UploadCaption extends Component {
       this.state;
 
     return (
-      <div className="w-full flex flex-col min-h-screen items-center justify-center mt-5 text-white">
+      <div className="w-full flex flex-col min-h-screen items-center justify-center mt-5 text-white px-2">
         <h1 className="text-2xl pt-10 font-bold">Upload Caption</h1>
-        <div className="justify-between text-xl w-1/2 bg-black bg-opacity-20 px-4">
+        <div className="justify-between text-xl lg:w-1/2 w-full bg-black bg-opacity-20 px-2">
           <form onSubmit={this.handleSubmit} className="flex flex-col">
             <div className="justify-between flex flex-col">
               <label htmlFor="teksArap" className="p-2 ">Teks Arab / Caption:</label>
