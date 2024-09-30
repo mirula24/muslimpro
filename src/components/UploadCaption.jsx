@@ -1,142 +1,141 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { useRef } from "react";
+import { Images } from "../assets";
+import emailjs from "@emailjs/browser";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/modal";
+import { Button } from "@nextui-org/button";
+import { useNavigate } from "react-router-dom";
 
-class UploadCaption extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      teksArab: "",
-      teksLatin: "",
-      ayat: "",
-      artinya: "",
-      successMessage: "",
-      errorMessage: "",
-      totalCaption: 0,
-    };
+function UploadCaption() {
+  const form = useRef();
+  const navigation = useNavigate();
+  const {isOpen, onOpen, onClose} = useDisclosure();
+
+  const checkEmail = () => {
+    
   }
+  
 
-  componentDidMount() {
-    this.fetchTotalCaption();
-  }
-
-  fetchTotalCaption = async () => {
-    try {
-      const response = await axios.get("https://json-server-vercel-tawny-eight.vercel.app/api/caption");
-      this.setState({ totalCaption: response.data.length });
-    } catch (error) {
-      console.error("Error fetching total caption:", error);
-      this.setState({ errorMessage: "Error fetching total caption." });
-    }
-  };
-
-  handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
-  handleSubmit = async (e) => {
+  const sendEmail = (e) => {
     e.preventDefault();
-    const { teksArab, teksLatin, ayat, artinya, totalCaption } = this.state;
+    handleOpen();
 
-    const newCaption = {
-      id: `${totalCaption + 1}`, 
-      teksArab,
-      teksLatin,
-      ayat,
-      artinya,
-    };
-
-    try {
-      await axios.post("https://json-server-vercel-tawny-eight.vercel.app/api/caption", newCaption);
-      this.setState({
-        teksArab: "",
-        teksLatin: "",
-        ayat: "",
-        artinya: "",
-        successMessage: "Caption uploaded successfully!",
-        errorMessage: "",
-        totalCaption: totalCaption + 1, 
-      });
-    } catch (error) {
-      this.setState({
-        successMessage: "",
-        errorMessage: "Error uploading caption: " + error.message,
-      });
-    }
+    // emailjs
+    //   .sendForm("service_z1iwj09", "template_vr3x4xi", form.current, {
+    //     publicKey: "YvN2U92L3CUzrBRW6",
+    //   })
+    //   .then(
+    //     () => {
+    //       console.log("SUCCESS!");
+    //     },
+    //     (error) => {
+    //       console.log("FAILED...", error.text);
+    //     }
+    //   );
   };
 
-  render() {
-    const { teksArab, teksLatin, ayat, artinya, successMessage, errorMessage } =
-      this.state;
-
-    return (
-      <div className="w-full flex flex-col min-h-screen items-center justify-center mt-5 text-white px-2">
-        <h1 className="text-2xl pt-10 font-bold">Upload Caption</h1>
-        <div className="justify-between text-xl lg:w-1/2 w-full bg-black bg-opacity-20 px-2">
-          <form onSubmit={this.handleSubmit} className="flex flex-col">
-            <div className="justify-between flex flex-col">
-              <label htmlFor="teksArap" className="p-2 ">Teks Arab / Caption:</label>
-              <input
-                id="teksArap"
-                className="rounded-md p-2 text-black"
-                type="text"
-                name="teksArab"
-                value={teksArab}
-                onChange={this.handleChange}
-                required
-              />
-            </div>
-            <div className="justify-between flex flex-col">
-              <label htmlFor="teksLatin" className="p-2">Teks Latin / Caption:</label>
-              <input
-                id="teksLatin"
-                className="rounded-md p-2 text-black"
-                type="text"
-                name="teksLatin"
-                value={teksLatin}
-                onChange={this.handleChange}
-                required
-              />
-            </div>
-            <div className="justify-between flex flex-col">
-              <label htmlFor="ayat" className="p-2">
-                Ayat / Dalil :
-              </label>
-              <input
-                className="rounded-md justify-center p-2 text-black"
-                id="ayat"
-                type="text"
-                name="ayat"
-                value={ayat}
-                onChange={this.handleChange}
-                required
-              />
-            </div>
-            <div className="justify-between flex flex-col">
-              <label htmlFor="artinya" className="p-2">
-                Artinya / by :
-              </label>
-              <textarea
-                id="artinya"
-                className="p-2 rounded-md text-black"
-                name="artinya"
-                value={artinya}
-                onChange={this.handleChange}
-                required
-              />
-            </div>
-            <button
-              className="bg-customGreen hover:bg-customOrange p-5 m-5 rounded-md"
-              type="submit"
-            >
-              Upload Caption
-            </button>
-          </form>
-        </div>
-        {successMessage && <p className="success">{successMessage}</p>}
-        {errorMessage && <p className="error">{errorMessage}</p>}
-      </div>
-    );
+  const buttonBeranda = () => {
+    onClose();
+    navigation('/');
   }
+  
+
+  const handleOpen = () => {
+    onOpen();
+  }
+  return (
+    <div className="flex flex-wrap mt-20 pb-10">
+      <div className="md:w-1/2 w-full px-8 md:10 justify-center items-center pb-10">
+        <p className="text-white text-2xl font-bold">Cara upload</p>
+        <p className="text-white text-xl font-semibold">
+          Terdapat 4 baris input yang bisa anda isi, dimana masing-masing baris
+          akan menjadi satu caption yang berhubungan
+        </p>
+        <p className="text-white text-xl font-semibold">Contoh :</p>
+        <img src={Images.contoh} alt="" className="self-center mx-auto w-[300px]" />
+        <p className="text-white text-xl font-semibold">
+          anda dapat membuat caption untuk satu email satu caption, jika caption anda telah melewati tahap review, maka anda dapat meupload caption baru
+        </p>
+        <p></p>
+      </div>
+      <div className="md:w-1/2 w-full">
+        <form
+          ref={form}
+          onSubmit={sendEmail}
+          className="flex flex-col px-10 gap-3"
+        >
+          <div className="flex justify-center gap-10 w-full items-center">
+            <label className="text-white font-semibold text-xl">Email : </label>
+            <input
+            required
+              type="email"
+              name="email"
+              className="w-1/2 text-xl px-2 text-white h-10 rounded-md bg-transparent border-white border-solid focus:border-white outline-white ring-2 ring-white"
+            />
+          </div>
+          <label className="text-white font-semibold text-xl">Baris 1 </label>
+          <input
+            type="text"
+            name="teksArab"
+            className="w-full text-xl px-2 text-white h-10 rounded-md bg-transparent border-white focus:border-white outline-white ring-2 ring-white "
+          />
+          <label className="text-white font-semibold text-xl">Baris 2 </label>
+          <input
+            type="text"
+            name="teksLatin"
+            className="w-full text-xl px-2 text-white h-10 rounded-md bg-transparent border-white focus:border-white outline-white ring-2 ring-white "
+          />
+          <label className="text-white font-semibold text-xl">Baris 3 </label>
+          <input
+            type="text"
+            name="ayat"
+            className="w-full text-xl px-2 text-white h-10 rounded-md bg-transparent border-white focus:border-white outline-white ring-2 ring-white "
+          />
+          <label className="text-white font-semibold text-xl">Baris 4 </label>
+          <input
+            type="text"
+            name="artinya"
+            className="w-full text-xl px-2 text-white h-10 rounded-md bg-transparent border-white focus:border-white outline-white ring-2 ring-white "
+          />
+
+          <input
+            type="submit"
+            value="Send"
+            className="mt-10 cursor-pointer bg-customGreen text-white font-semibold border-none px-8 py-2 rounded-md"
+          />
+        </form>
+      </div>
+      <Modal 
+        size='md' 
+        isOpen={isOpen} 
+        onClose={onClose} 
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Terima Kasih</ModalHeader>
+              <ModalBody>
+                <p> 
+                  Caption anda akan melalui tahap review, jika caption yang anda upload lolos tahap review maka
+                  nanti akan muncul di beranda website ini.
+                </p>
+              
+                <p>
+                  Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
+                  dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
+                  Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onPress={buttonBeranda}>
+                  Kembali
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </div>
+  );
 }
 
 export default UploadCaption;

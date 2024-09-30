@@ -1,6 +1,5 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-import GenerateCaption from '../components/Caption'
 
 export default function LandingPage() {
   return (

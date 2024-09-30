@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axiosInstance from "../api/AxiosInstance";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../api/AxiosInstanceToEquran";
 
 export default function ListSurah() {
   const [surah, setSurah] = useState([]);
@@ -8,8 +8,10 @@ export default function ListSurah() {
 
   const SURAHLIST = async () => {
     try {
-      const result = await axiosInstance.get("/surah");
-      setSurah(result.data);
+      const result = await axiosInstance.get("surat");
+      console.log("SURAHLIST result : ", result);
+      
+      setSurah(result.data.data);
       console.log(surah);
 
       return result.data;
@@ -40,10 +42,10 @@ export default function ListSurah() {
             <button className="w-full flex  " onClick={()=>navigate(`${datas.nomor}`)}>
               <p className="w-1/6 ">{datas.nomor}</p>
               <p className="w-4/6  font-custom">
-                 {datas.nama_latin}\{datas.nama}
+                 {datas.namaLatin}\{datas.nama}
               </p>
               <p className="w-1/6 ">
-                {datas.jumlah_ayat}
+                {datas.jumlahAyat}
               </p>
             </button>
           </div>
