@@ -4,20 +4,34 @@ import emailjs from "@emailjs/browser";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/modal";
 import { Button } from "@nextui-org/button";
 import { useNavigate } from "react-router-dom";
+import CaptionApi from "../api/CaptionApi";
 
 function UploadCaption() {
   const form = useRef();
   const navigation = useNavigate();
   const {isOpen, onOpen, onClose} = useDisclosure();
 
-  const checkEmail = () => {
-    
+  const checkEmail = async (email) => {
+    const response = await CaptionApi.getEmailFromReview(email);
+    if(response){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
+  
   
 
   const sendEmail = (e) => {
     e.preventDefault();
-    handleOpen();
+    if(checkEmail(form.current.email)){
+
+      handleOpen();
+    }else{
+      console.log("__________________________");
+      
+    }
 
     // emailjs
     //   .sendForm("service_z1iwj09", "template_vr3x4xi", form.current, {
@@ -43,7 +57,7 @@ function UploadCaption() {
     onOpen();
   }
   return (
-    <div className="flex flex-wrap mt-20 pb-10">
+    <div className="flex flex-wrap  pb-10 min-h-screen items-center">
       <div className="md:w-1/2 w-full px-8 md:10 justify-center items-center pb-10">
         <p className="text-white text-2xl font-bold">Cara upload</p>
         <p className="text-white text-xl font-semibold">
