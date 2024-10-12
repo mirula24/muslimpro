@@ -1,12 +1,12 @@
 
-
 import axios from "axios";
+
 
 const BASE_URL = "https://muslimpro-be-production.up.railway.app/api";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
-  timeout: 1000,
+  timeout: 5000,
 });
 class CaptionApi{
     static async getEmailFromReview(email){
@@ -15,6 +15,19 @@ class CaptionApi{
         console.log("get by email in axios : ", resp.data);
         console.log('====================================');
         return resp.data;
+    }
+  
+
+    static async getRandomCaption(){
+      try {
+        const resp = await axiosInstance.get("/captions/random");
+        console.log(resp);
+        return resp.data
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
     }
 }
 

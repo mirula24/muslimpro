@@ -1,51 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../api/AxiosInstance";
+import CaptionApi from "../api/CaptionApi";
 
 export default function Caption() {
   const { nomor } = useParams();
   const [caption, setCaption] = useState({});
   const navigate = useNavigate();
 
-  const CAPTION = async (total) => {
-    try {
-      const result = await axiosInstance.get(`caption/${endNumber(total)}`);
-      setCaption(result.data);
-      console.log("caption", result.data);
-      return;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return null;
-    }
-  };
-
-  const endNumber = (total) => {
-    return Math.floor(Math.random() * total) + 1;
-  };
-
-  const fetchAndSetCaption = async () => {
-    try {
-      const total = await axiosInstance.get(`caption/`);
-      await CAPTION(total.data.length);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
+  
+  const randomCaptiion = async () => {
+    const response =  await CaptionApi.getRandomCaption()
+    console.log("response :::::" , response);
+    
+  }
+  
   useEffect(() => {
-    fetchAndSetCaption();
+    randomCaptiion();
   }, []);
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center sm:px-40 px-2">
       <div className="bg-black bg-opacity-40 p-10 text-xl gap-3 rounded-lg text-white mb-36 mt-12">
-        <p className="font-custom p-5 text-2xl">{caption.teksArab}</p>
-        <p className="py-4">{caption.teksLatin}</p>
-        <p className="font-custom py-7">{caption.ayat}</p>
-        <p className="">{caption.artinya}</p>
+        <p className="font-custom p-5 text-2xl">{caption.baris1}</p>
+        <p className="py-4">{caption.baris2}</p>
+        <p className="font-custom py-7">{caption.baris3}</p>
+        <p className="">{caption.baris4}</p>
       </div>
       <div className="w-full justify-center flex">
-        <button onClick={fetchAndSetCaption} className="bg-customGreen hover:bg-customOrange p-5 fixed bottom-8 rounded-lg text-white font-bold">
+        <button onClick={randomCaptiion} className="bg-customGreen hover:bg-customOrange p-5 fixed bottom-8 rounded-lg text-white font-bold">
           Random Caption untuk memperbaiki mood mu
         </button>
       </div>
