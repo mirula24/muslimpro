@@ -57,11 +57,12 @@ const router = createBrowserRouter([
         path: "tafsir/:nomor",
         element: <Tafsir />,
       },
-      {
-        path:"caption_editor/:id",
-        element:<CaptionEditor />
-      }
+      
     ],
   },
+  {
+    path:"/caption_editor/:id",
+    element:<CaptionEditor />
+  }
 ]);
 export default router;
