@@ -7,6 +7,7 @@ import ListSurah from "../components/ListSurah";
 import Ngaji from "../components/Ngaji";
 import Tafsir from "../components/Tafsir";
 import UploadCaption from "../components/UploadCaption";
+import CaptionEditor from "../pages/CaptionEditor";
 
 const NgajiComponent = () => {
   const params = useParams();
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
         path: "tafsir/:nomor",
         element: <Tafsir />,
       },
+      {
+        path:"caption_editor/:id",
+        element:<CaptionEditor />
+      }
     ],
   },
 ]);

@@ -1,146 +1,123 @@
-import React, { useRef } from "react";
-import { Images } from "../assets";
-import emailjs from "@emailjs/browser";
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/modal";
-import { Button } from "@nextui-org/button";
+import React, { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { 
+  Modal, 
+  ModalContent, 
+  ModalHeader, 
+  ModalBody, 
+  ModalFooter, 
+  useDisclosure,
+  Button,
+  Input,
+  Textarea
+} from "@nextui-org/react";
+import { Images } from "../assets";
 import CaptionApi from "../api/CaptionApi";
+import emailjs from '@emailjs/browser';
 
-function UploadCaption() {
-  const form = useRef();
+export default function UploadCaption() {
   const navigation = useNavigate();
-  const {isOpen, onOpen, onClose} = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const formRef = useRef();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const checkEmail = async (email) => {
-    const response = await CaptionApi.getEmailFromReview(email);
-    if(response){
-      return true;
+  const onSubmit = async (data) => {
+    setIsSubmitting(true);
+    try {
+      const response = await CaptionApi.createCaption(data);
+      const captionId = response.id; // Assuming the API returns an object with an 'id' field
+
+      // Add the captionId to the form data for EmailJS
+      formRef.current.captionId = captionId;
+      console.log('====================================');
+      console.log(captionId);
+      console.log('====================================');
+
+      await emailjs.sendForm(
+        'service_z1iwj09', 
+        'template_vr3x4xi', 
+        formRef.current, 
+        {
+          publicKey: 'YvN2U92L3CUzrBRW6',
+        }
+      );
+
+      console.log('Caption created and email sent successfully!');
+      onOpen(); // Open the modal on successful submission
+    } catch (error) {
+      console.error("Failed to submit caption or send email:", error);
+      // Handle error (e.g., show an error message to the user)
+    } finally {
+      setIsSubmitting(false);
     }
-    else{
-      return false;
-    }
-  }
-  
-  
-
-  const sendEmail = (e) => {
-    e.preventDefault();
-    if(checkEmail(form.current.email)){
-
-      handleOpen();
-    }else{
-      console.log("__________________________");
-      
-    }
-
-    // emailjs
-    //   .sendForm("service_z1iwj09", "template_vr3x4xi", form.current, {
-    //     publicKey: "YvN2U92L3CUzrBRW6",
-    //   })
-    //   .then(
-    //     () => {
-    //       console.log("SUCCESS!");
-    //     },
-    //     (error) => {
-    //       console.log("FAILED...", error.text);
-    //     }
-    //   );
   };
 
-  const buttonBeranda = () => {
+  const navigateToHome = () => {
     onClose();
     navigation('/');
-  }
-  
+  };
 
-  const handleOpen = () => {
-    onOpen();
-  }
   return (
-    <div className="flex flex-wrap  pb-10 min-h-screen items-center">
-      <div className="md:w-1/2 w-full px-8 md:10 justify-center items-center pb-10">
-        <p className="text-white text-2xl font-bold">Cara upload</p>
-        <p className="text-white text-xl font-semibold">
+    <div className="flex flex-wrap mt-20 md:mt-0 pb-10 min-h-screen items-center">
+      <div className="md:w-1/2 w-full px-8 md:px-10 justify-center items-center pb-10">
+        <h2 className="text-white text-2xl font-bold">Cara upload</h2>
+        <p className="text-primary-foreground text-xl font-semibold">
           Terdapat 4 baris input yang bisa anda isi, dimana masing-masing baris
           akan menjadi satu caption yang berhubungan
         </p>
-        <p className="text-white text-xl font-semibold">Contoh :</p>
-        <img src={Images.contoh} alt="" className="self-center mx-auto w-[300px]" />
-        <p className="text-white text-xl font-semibold">
+        <p className="text-primary-foreground text-xl font-semibold">Contoh :</p>
+        <img src={Images.contoh} alt="Contoh caption" className="self-center mx-auto w-[300px]" />
+        <p className="text-primary-foreground text-xl font-semibold">
           anda dapat membuat caption untuk satu email satu caption, jika caption anda telah melewati tahap review, maka anda dapat meupload caption baru
         </p>
-        <p></p>
       </div>
-      <div className="md:w-1/2 w-full">
-        <form
-          ref={form}
-          onSubmit={sendEmail}
-          className="flex flex-col px-10 gap-3"
-        >
-          <div className="flex justify-center gap-10 w-full items-center">
-            <label className="text-white font-semibold text-xl">Email : </label>
-            <input
-            required
-              type="email"
-              name="email"
-              className="w-1/2 text-xl px-2 text-white h-10 rounded-md bg-transparent border-white border-solid focus:border-white outline-white ring-2 ring-white"
+      <div className="md:w-1/2 flex flex-col items-center w-full gap-10">
+        <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 w-full max-w-xs" aria-label="Caption submission form">
+          <Input
+            {...register("email", { 
+              required: "Email is required", 
+              pattern: { value: /^\S+@\S+$/i, message: "Invalid email address" } 
+            })}
+            type="email"
+            label="Email"
+            isInvalid={!!errors.email}
+            errorMessage={errors.email?.message}
+          />
+          {['baris1', 'baris2', 'baris3', 'baris4'].map((field, index) => (
+            <Textarea
+              key={field}
+              {...register(field, { required: `Baris ${index + 1} is required` })}
+              label={`Baris ${index + 1}`}
+              placeholder="Tuliskan di sini"
+              isInvalid={!!errors[field]}
+              errorMessage={errors[field]?.message}
             />
-          </div>
-          <label className="text-white font-semibold text-xl">Baris 1 </label>
-          <input
-            type="text"
-            name="teksArab"
-            className="w-full text-xl px-2 text-white h-10 rounded-md bg-transparent border-white focus:border-white outline-white ring-2 ring-white "
-          />
-          <label className="text-white font-semibold text-xl">Baris 2 </label>
-          <input
-            type="text"
-            name="teksLatin"
-            className="w-full text-xl px-2 text-white h-10 rounded-md bg-transparent border-white focus:border-white outline-white ring-2 ring-white "
-          />
-          <label className="text-white font-semibold text-xl">Baris 3 </label>
-          <input
-            type="text"
-            name="ayat"
-            className="w-full text-xl px-2 text-white h-10 rounded-md bg-transparent border-white focus:border-white outline-white ring-2 ring-white "
-          />
-          <label className="text-white font-semibold text-xl">Baris 4 </label>
-          <input
-            type="text"
-            name="artinya"
-            className="w-full text-xl px-2 text-white h-10 rounded-md bg-transparent border-white focus:border-white outline-white ring-2 ring-white "
-          />
-
-          <input
-            type="submit"
-            value="Send"
-            className="mt-10 cursor-pointer bg-customGreen text-white font-semibold border-none px-8 py-2 rounded-md"
-          />
+          ))}
+          <Button type="submit" className="bg-customOrange text-white" isLoading={isSubmitting}>
+            Submit Caption
+          </Button>
         </form>
       </div>
       <Modal 
-        size='md' 
+        size="md" 
         isOpen={isOpen} 
         onClose={onClose} 
+        aria-labelledby="modal-title"
       >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Terima Kasih</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1" id="modal-title">Terima Kasih</ModalHeader>
               <ModalBody>
                 <p> 
                   Caption anda akan melalui tahap review, jika caption yang anda upload lolos tahap review maka
                   nanti akan muncul di beranda website ini.
                 </p>
-              
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
-                  dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
-                  Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
-                </p>
               </ModalBody>
               <ModalFooter>
-                <Button color="primary" onPress={buttonBeranda}>
+                <Button color="primary" onPress={navigateToHome}>
                   Kembali
                 </Button>
               </ModalFooter>
@@ -151,5 +128,3 @@ function UploadCaption() {
     </div>
   );
 }
-
-export default UploadCaption;
