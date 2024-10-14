@@ -15,6 +15,9 @@ import {
 import { Images } from "../assets";
 import CaptionApi from "../api/CaptionApi";
 import emailjs from '@emailjs/browser';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function UploadCaption() {
   const navigation = useNavigate();
@@ -27,27 +30,32 @@ export default function UploadCaption() {
     setIsSubmitting(true);
     try {
       const response = await CaptionApi.createCaption(data);
-      const captionId = response.id; // Assuming the API returns an object with an 'id' field
+      const captionId = response.Id; // Assuming the API returns an object with an 'Id' field
 
-      // Add the captionId to the form data for EmailJS
-      formRef.current.captionId = captionId;
-      console.log('====================================');
-      console.log(captionId);
-      console.log('====================================');
+      // Create a hidden input for captionId
+      const hiddenInput = document.createElement('input');
+      hiddenInput.type = 'hidden';
+      hiddenInput.name = 'captionId';
+      hiddenInput.value = captionId;
+
+      // Append the hidden input to the form
+      formRef.current.appendChild(hiddenInput);
 
       await emailjs.sendForm(
         'service_z1iwj09', 
         'template_vr3x4xi', 
-        formRef.current, 
-        {
-          publicKey: 'YvN2U92L3CUzrBRW6',
-        }
+        formRef.current, // Use the form element directly
+        'YvN2U92L3CUzrBRW6' // Your public key
       );
+
+      // Remove the hidden input after sending
+      formRef.current.removeChild(hiddenInput);
 
       console.log('Caption created and email sent successfully!');
       onOpen(); // Open the modal on successful submission
     } catch (error) {
       console.error("Failed to submit caption or send email:", error);
+      toast("email already submit");
       // Handle error (e.g., show an error message to the user)
     } finally {
       setIsSubmitting(false);
@@ -100,6 +108,7 @@ export default function UploadCaption() {
           </Button>
         </form>
       </div>
+      <ToastContainer />
       <Modal 
         size="md" 
         isOpen={isOpen} 

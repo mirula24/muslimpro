@@ -1,6 +1,7 @@
 
 import axios from "axios";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BASE_URL = "https://muslim-pro-golang-production.up.railway.app";
 
