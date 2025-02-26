@@ -25,10 +25,12 @@ export default function Caption() {
   return (
     <div className="flex flex-col min-h-screen items-center justify-center sm:px-40 px-2">
       <div className="bg-black bg-opacity-40 p-10 text-xl gap-3 rounded-lg text-white mb-36 mt-12">
-        <p className="font-custom p-5 text-2xl">{caption.baris1}</p>
-        <p className="py-4">{caption.baris2}</p>
-        <p className="font-custom py-7">{caption.baris3}</p>
-        <p className="">{caption.baris4}</p>
+        <p className="font-custom p-5 text-2xl leading-loose">
+          {caption.baris1}
+        </p>
+        <p className="py-4 leading-loose">{caption.baris2}</p>
+        <p className="font-custom py-7 leading-loose">{caption.baris3}</p>
+        <p className="leading-loose">{caption.baris4}</p>
       </div>
       <div className="w-full justify-center flex">
         <button
