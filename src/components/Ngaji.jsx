@@ -71,10 +71,10 @@ export default function Ngaji() {
               <p className="md:text-xl text-sm text-white w-5/12 ">
                 {data.teksIndonesia}
               </p>
-              <p className="text-2xl text-white w-6/12 font-custom">
+              <p className="text-2xl text-white w-6/12 font-custom leading-loose">
                 {data.teksArab}
               </p>
-              <p className="text-2xl text-white w-1/12 font-custom">
+              <p className="text-2xl text-white w-1/12 font-custom ">
                 {data.nomorAyat}
               </p>
             </div>
